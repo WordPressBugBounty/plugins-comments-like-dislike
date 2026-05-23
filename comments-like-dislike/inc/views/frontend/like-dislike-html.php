@@ -1,5 +1,6 @@
 <?php
-$cld_settings = get_option('cld_settings');
+$cld_library = (isset($this) && $this instanceof CLD_Library) ? $this : $GLOBALS['cld_library'];
+$cld_settings = $cld_library->get_settings();
 if (!empty($custom_function)) {
     $cld_settings['basic_settings']['status'] = 1;
 }
@@ -7,7 +8,7 @@ if ($cld_settings['basic_settings']['status'] != 1) {
     // if comments like dislike is disabled from backend
     return;
 }
-if (isset($comment)) {
+if (isset($comment) && is_object($comment) && isset($comment->comment_ID)) {
     $comment_id = $comment->comment_ID;
 }
 if (empty($comment_id)) {
@@ -30,7 +31,7 @@ if ($cld_settings['basic_settings']['like_dislike_resistriction'] == 'cookie' &&
  * IP Validation
  */
 if ($cld_settings['basic_settings']['like_dislike_resistriction'] == 'ip') {
-    $user_ip = $this->get_user_IP();
+    $user_ip = $cld_library->get_user_IP();
     $liked_ips = get_comment_meta($comment_id, 'cld_ips', true);
     $liked_ips_info = get_comment_meta($comment_id, 'cld_ips_info', true);
     if (empty($liked_ips)) {

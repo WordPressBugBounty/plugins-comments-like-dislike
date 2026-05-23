@@ -3,8 +3,8 @@ Contributors: Happy Coders, regankhadgi
 Donate link: http://wphappycoders.com/
 Tags: comments, comment, rating, like, dislike
 Requires at least: 5.5
-Tested up to: 6.9
-Stable tag: 1.2.4
+Tested up to: 7.0
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,11 @@ Yes you can undo like or dislike by simply clicking again the same icon. You can
 7. Comments Like Dislike Design Settings
 
 == Changelog ==
+= 1.2.5 =
+* Fixed PHP warnings/notices when saved plugin settings are missing or incomplete.
+* Added safer fallback handling for frontend rendering, admin settings, asset enqueueing, and AJAX vote actions.
+* Improved request value handling in settings save, comment vote actions, and comment count metabox save.
+
 = 1.2.4 = 
 * Status enable for custom function by default
 

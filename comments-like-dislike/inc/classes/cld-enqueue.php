@@ -2,7 +2,7 @@
 
 if (!class_exists('CLD_Enqueue')) {
 
-    class CLD_Enqueue {
+    class CLD_Enqueue extends CLD_Library {
 
         /**
          * Includes all the frontend and backend JS and CSS enqueues
@@ -10,12 +10,13 @@ if (!class_exists('CLD_Enqueue')) {
          * @since 1.0.0
          */
         function __construct() {
+            parent::__construct();
             add_action('comment_form', array($this, 'register_frontend_assets'));
             add_action('admin_enqueue_scripts', array($this, 'register_backend_assets'));
         }
 
         function register_frontend_assets() {
-            $cld_settings = get_option('cld_settings');
+            $cld_settings = $this->cld_settings;
             if (empty($cld_settings['design_settings']['disable_fontawesome'])) {
                 $fontawesome_url = CLD_CSS_DIR . '/fontawesome/css/all.min.css';
                 /**

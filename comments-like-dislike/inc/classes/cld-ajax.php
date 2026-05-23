@@ -5,6 +5,7 @@ if (!class_exists('CLD_Ajax')) {
     class CLD_Ajax extends CLD_Library {
 
         function __construct() {
+            parent::__construct();
             add_action('wp_ajax_cld_comment_ajax_action', array($this, 'like_dislike_action'));
             add_action('wp_ajax_nopriv_cld_comment_ajax_action', array($this, 'like_dislike_action'));
 
@@ -14,7 +15,7 @@ if (!class_exists('CLD_Ajax')) {
 
         function like_dislike_action() {
             if (isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'cld-ajax-nonce')) {
-                $comment_id = sanitize_text_field($_POST['comment_id']);
+                $comment_id = isset($_POST['comment_id']) ? sanitize_text_field(wp_unslash($_POST['comment_id'])) : '';
                 /**
                  * Action cld_before_ajax_process
                  * Fires just before the ajax process
@@ -27,9 +28,9 @@ if (!class_exists('CLD_Ajax')) {
 
 
 
-                $type = sanitize_text_field($_POST['type']);
+                $type = isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : '';
 
-                $cld_settings = get_option('cld_settings');
+                $cld_settings = $this->cld_settings;
                 /**
                  * Cookie Validation
                  */
@@ -163,7 +164,7 @@ if (!class_exists('CLD_Ajax')) {
         }
         function like_dislike_undo_action() {
             if (isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'cld-ajax-nonce')) {
-                $comment_id = sanitize_text_field($_POST['comment_id']);
+                $comment_id = isset($_POST['comment_id']) ? sanitize_text_field(wp_unslash($_POST['comment_id'])) : '';
                 /**
                  * Action cld_before_undo_ajax_process
                  * Fires just before the undo ajax process
@@ -176,9 +177,9 @@ if (!class_exists('CLD_Ajax')) {
 
 
 
-                $type = sanitize_text_field($_POST['type']);
+                $type = isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : '';
 
-                $cld_settings = get_option('cld_settings');
+                $cld_settings = $this->cld_settings;
 
                 /**
                  * Cookie Validation

@@ -5,7 +5,7 @@ defined('ABSPATH') or die('No script kiddies please');
 /*
   Plugin Name: Comments Like Dislike
   Description: A simple plugin to add like dislike for your comments
-  Version:     1.2.4
+  Version:     1.2.5
   Author:      WP Happy Coders
   Author URI:  http://wphappycoders.com
   License:     GPL2
@@ -50,7 +50,7 @@ if (!class_exists('CLD_Comments_like_dislike')) {
             defined('CLD_IMG_DIR') or define('CLD_IMG_DIR', plugin_dir_url(__FILE__) . 'images');
             defined('CLD_CSS_DIR') or define('CLD_CSS_DIR', plugin_dir_url(__FILE__) . 'css');
             defined('CLD_JS_DIR') or define('CLD_JS_DIR', plugin_dir_url(__FILE__) . 'js');
-            defined('CLD_VERSION') or define('CLD_VERSION', '1.2.4');
+            defined('CLD_VERSION') or define('CLD_VERSION', '1.2.5');
             defined('CLD_TD') or define('CLD_TD', 'comments-like-dislike');
             defined('CLD_BASENAME') or define('CLD_BASENAME', plugin_basename(__FILE__));
         }

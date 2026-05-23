@@ -7,7 +7,7 @@ if (!class_exists('CLD_Library')) {
         var $cld_settings;
 
         function __construct() {
-            $this->cld_settings = get_option('cld_settings');
+            $this->cld_settings = $this->get_settings();
         }
 
         function print_array($array) {
@@ -48,6 +48,36 @@ if (!class_exists('CLD_Library')) {
         }
 
         /**
+         * Returns saved settings merged with defaults.
+         *
+         * @return array
+         *
+         * @since 1.2.5
+         */
+        function get_settings() {
+            $default_settings = $this->get_default_settings();
+            $saved_settings = get_option('cld_settings');
+
+            if (!is_array($saved_settings)) {
+                return $default_settings;
+            }
+
+            foreach ($default_settings as $section => $values) {
+                if (isset($saved_settings[$section]) && is_array($saved_settings[$section]) && is_array($values)) {
+                    $default_settings[$section] = array_replace($values, $saved_settings[$section]);
+                }
+            }
+
+            foreach ($saved_settings as $section => $values) {
+                if (!isset($default_settings[$section])) {
+                    $default_settings[$section] = $values;
+                }
+            }
+
+            return $default_settings;
+        }
+
+        /**
          * Returns visitors IP address
          *
          * @return string $ip
@@ -56,7 +86,7 @@ if (!class_exists('CLD_Library')) {
          */
         function get_user_IP() {
 
-            $ip = sanitize_text_field($_SERVER['REMOTE_ADDR']);
+            $ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '';
 
             // If the IP is in an unexpected format, fallback to a default
             if (filter_var($ip, FILTER_VALIDATE_IP) === false) {

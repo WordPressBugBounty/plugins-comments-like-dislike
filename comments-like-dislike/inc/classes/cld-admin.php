@@ -64,9 +64,15 @@ if (!class_exists('CLD_Admin')) {
         function save_settings() {
             if (isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'cld-backend-ajax-nonce') && current_user_can('manage_options')) {
                 $_POST = stripslashes_deep($_POST);
-                parse_str($_POST['settings_data'], $settings_data);
-                foreach ($settings_data['cld_settings'] as $key => $val) {
-                    $cld_settings[$key] = array_map('sanitize_text_field', $val);
+                $settings_data = array();
+                $cld_settings = array();
+                $posted_settings = isset($_POST['settings_data']) ? $_POST['settings_data'] : '';
+                parse_str($posted_settings, $settings_data);
+
+                if (!empty($settings_data['cld_settings']) && is_array($settings_data['cld_settings'])) {
+                    foreach ($settings_data['cld_settings'] as $key => $val) {
+                        $cld_settings[$key] = is_array($val) ? array_map('sanitize_text_field', $val) : sanitize_text_field($val);
+                    }
                 }
                 /**
                  * Fires before storing the settings array into database
@@ -156,7 +162,7 @@ if (!class_exists('CLD_Admin')) {
         }
 
         function save_cld_metabox($comment_id) {
-            $nonce_name = isset($_POST['cld_metabox_nonce_field']) ? $_POST['cld_metabox_nonce_field'] : '';
+            $nonce_name = isset($_POST['cld_metabox_nonce_field']) ? sanitize_text_field(wp_unslash($_POST['cld_metabox_nonce_field'])) : '';
             $nonce_action = 'cld_metabox_nonce';
 
             // Check if nonce is valid.
@@ -166,8 +172,8 @@ if (!class_exists('CLD_Admin')) {
 
 
             if (isset($_POST['cld_like_count'], $_POST['cld_dislike_count'])) {
-                $cld_like_count = sanitize_text_field($_POST['cld_like_count']);
-                $cld_dislike_count = sanitize_text_field($_POST['cld_dislike_count']);
+                $cld_like_count = sanitize_text_field(wp_unslash($_POST['cld_like_count']));
+                $cld_dislike_count = sanitize_text_field(wp_unslash($_POST['cld_dislike_count']));
                 update_comment_meta($comment_id, 'cld_like_count', $cld_like_count);
                 update_comment_meta($comment_id, 'cld_dislike_count', $cld_dislike_count);
                 return $comment_id;
